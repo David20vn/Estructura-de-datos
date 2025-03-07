@@ -5,7 +5,7 @@
 
 // Ordenamiento Burbuja (O(n^2))
 void bubbleSort(int arr[], int n) {
-	int i, j;
+int i, j;
     for ( i = 0; i < n - 1; i++) {
         for ( j = 0; j < n - 1 - i; j++) { // Optimización menor
             if (arr[j] > arr[j + 1]) {
@@ -19,7 +19,7 @@ void bubbleSort(int arr[], int n) {
 
 // Ordenamiento por Inserción (O(n^2))
 void insertionSort(int arr[], int n) {
-	int i;
+int i;
     for ( i = 1; i < n; i++) {
         int key = arr[i];
         int j = i - 1;
@@ -56,14 +56,14 @@ void quickSort(int arr[], int low, int high) {
 
 // Generar un array con números aleatorios en el rango [0, 100]
 void generarArray(int arr[], int size) {
-	int i;
+int i;
   for ( i = 0; i < size; i++) {
       arr[i] = rand() % 101;
   }
 }
 
 int sequentialSearch(int arr[], int n, int x) {
-	int i;
+int i;
     for (i = 0; i < n; i++) {
         if (arr[i] == x) {
             return i; // Retorna la posición donde se encontró el elemento
@@ -83,7 +83,7 @@ int binarySearch(int arr[], int low, int high, int x) {
 }
 
 int main() {
-	
+
     srand(time(NULL)); // Inicializar semilla de aleatoriedad
     int size, posicion_buscar;
     clock_t inicio, fin;
@@ -127,22 +127,8 @@ int main() {
     fin = clock();
     tiempo = (double)(fin - inicio) / CLOCKS_PER_SEC;
     printf("Tiempo en ordenar con Quick Sort: %f segundos\n", tiempo);
-    
+   
     posicion_buscar = (int) rand()%(size+1);
-    
-    // Medir el tiempo busqueda secuencial
-    inicio = clock();
-    sequentialSearch(arr_burbuja, size,arr_burbuja[posicion_buscar]);
-    fin = clock();
-    tiempo = (double)(fin - inicio) / CLOCKS_PER_SEC;
-    printf("Tiempo para busqueda secuencial: %f segundos\n", tiempo);
-    
-    // Medir el tiempo de busqueda binaria
-    inicio = clock();
-    binarySearch(arr_burbuja, 0, size, arr_burbuja[posicion_buscar]);
-    fin = clock();
-    tiempo = (double)(fin - inicio) / CLOCKS_PER_SEC;
-    printf("Tiempo para busqueda bina: %f segundos\n", tiempo);
 
     // Liberar memoria
     free(arr_burbuja);
@@ -151,5 +137,4 @@ int main() {
 
     return 0;
 }
-
 
