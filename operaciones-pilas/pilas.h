@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 typedef struct Nodo Nodo;
 
@@ -16,7 +17,7 @@ int menu(){
 	
 	printf("\n\n\t\tMENU\n");
 	printf("\n\t1) Comprobar palabra palindrome.");
-	printf("\n\t2) pasar de infija a prefija.");
+	printf("\n\t2) pasar de infija a posfija.");
 	printf("\n\t3) Comprobar balanceo de parentesis.");
 	
 	printf("\nOpcion: ");
@@ -108,6 +109,73 @@ int balanceo ( char ecuacion[]){
 	}
 }
 
+// Prioridad de operadores
+int prioridad(char operador) {
+    switch (operador) {
+        case '+': case '-': return 1;
+        case '*': case '/': return 2;
+        case '^': return 3;
+        default: return 0;
+    }
+}
+
+char cima ( Nodo* pila ){
+	if ( pila_vacia ( pila )){
+		return 0;
+	}
+	
+	return pila->letra;
+}
+
+// Conversión de infija a posfija
+void inf_a_posf (char *expresion) {
+	
+    Nodo* pila = (Nodo*) malloc ( sizeof(Nodo) );
+    pila = NULL;
+    char *posfija = (char*) malloc ( sizeof(char) * strlen(expresion) + 1), temporal;
+    posfija[0] = '\0';
+    int i;
+
+    for ( i = 0; expresion[i] != '\0'; i++) {
+    	
+        char caracter = expresion[i];
+
+        if (isalnum(caracter)) {
+            // Si es operando, agregar a la salida
+            strncat(posfija, &caracter, 1);
+            
+        } else if (caracter == '(') {
+        	
+            push(&pila, caracter);
+            
+        } else if (caracter == ')') {
+            // Sacar elementos hasta encontrar '('
+            while (!pila_vacia(pila) && cima(pila) != '(') {
+            	
+            		temporal = pop(&pila);
+                strncat(posfija, &temporal, 1);
+                
+            }
+            pop(&pila); // Eliminar el paréntesis izquierdo
+            
+        } else { // Es un operador
+            while (!pila_vacia(pila) && prioridad(caracter) <= prioridad(cima(pila))) {
+                temporal = pop(&pila);
+                strncat(posfija, &temporal, 1);
+            }
+            push(&pila, caracter);
+        }
+    }
+
+    // Sacar los elementos restantes de la pila
+    while (!pila_vacia(pila)) {
+        temporal = pop(&pila);
+        strncat(posfija, &temporal, 1);
+    }
+
+    strcpy ( expresion, posfija );
+    free(posfija);
+}
 
 
 

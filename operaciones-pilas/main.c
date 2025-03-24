@@ -17,11 +17,12 @@ int main(){
 				scanf("%[^\n]", cadena);
 				printf ( palindrome(cadena) ? "\nLa palabra si es palindrome" : "\nLa palabra no es palindrome" );
 				break;
-			/*case 2:
-				printf("\n\nDigite la ecuacion a pasar de infija a prefija: ");
+			case 2:
+				printf("\n\nDigite la ecuacion a pasar de infija a posfija: ");
 				scanf("%[^\n]", cadena);
-				printf( "\nLa ecuacion es: %s", inf_a_posf(cadena) );
-				break;*/
+				inf_a_posf(cadena);
+				printf( "\nLa ecuacion es: %s", cadena );
+				break;
 			case 3: 
 				printf( "\n\nDigite la ecuacion a evaluar el balanceo: ");
 				scanf("%[^\n]", cadena);
