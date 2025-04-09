@@ -11,6 +11,8 @@ struct Nodo{
     Nodo* sig;
 };
 
+// auxiliares
+
 int menu(){
 	
 	int opcion;
@@ -19,6 +21,8 @@ int menu(){
 	printf("\n\t1) Comprobar palabra palindrome.");
 	printf("\n\t2) pasar de infija a posfija.");
 	printf("\n\t3) Comprobar balanceo de parentesis.");
+	printf("\n\t4) Evaluar una expresión en notación postfija.");
+	printf("\n\t5) Salir.");
 	
 	printf("\nOpcion: ");
 	scanf ("%d", &opcion);
@@ -68,6 +72,47 @@ void llenar_pila ( Nodo** pila, char cadena[]){
 	}
 }
 
+
+int prioridad(char operador) {
+    switch (operador) {
+        case '+': case '-': return 1;
+        case '*': case '/': return 2;
+        case '^': return 3;
+        default: return 0;
+    }
+}
+
+char cima ( Nodo* pila ){
+	if ( pila_vacia ( pila )){
+		return 0;
+	}
+	
+	return pila->letra;
+}
+
+int operacion ( char num1, char num2, char operador ){
+	
+	switch ( operador ){
+		case '+':
+			return num1-'0' + num2 -'0';
+			break;
+		case '-':
+			return num1-'0' - num2-'0';
+			break;
+		case '*':
+			return (num1-'0') * (num2-'0');
+			break;
+		case '/':
+			return (num1-'0') / (num2-'0');
+			break;
+		case '^':
+			return (num1-'0') ** (num2-'0');
+			break;
+	}
+}
+
+// 1.
+
 int palindrome ( char palabra[] ){
 	
 	Nodo *pila=NULL;
@@ -84,6 +129,8 @@ int palindrome ( char palabra[] ){
 	free(pila);
 	return validacion;
 }
+
+// 2.
 
 int balanceo ( char ecuacion[]){
 	
@@ -109,25 +156,8 @@ int balanceo ( char ecuacion[]){
 	}
 }
 
-// Prioridad de operadores
-int prioridad(char operador) {
-    switch (operador) {
-        case '+': case '-': return 1;
-        case '*': case '/': return 2;
-        case '^': return 3;
-        default: return 0;
-    }
-}
+// 3.
 
-char cima ( Nodo* pila ){
-	if ( pila_vacia ( pila )){
-		return 0;
-	}
-	
-	return pila->letra;
-}
-
-// Conversión de infija a posfija
 void inf_a_posf (char *expresion) {
 	
     Nodo* pila = (Nodo*) malloc ( sizeof(Nodo) );
@@ -141,7 +171,7 @@ void inf_a_posf (char *expresion) {
         char caracter = expresion[i];
 
         if (isalnum(caracter)) {
-            // Si es operando, agregar a la salida
+        	
             strncat(posfija, &caracter, 1);
             
         } else if (caracter == '(') {
@@ -149,16 +179,16 @@ void inf_a_posf (char *expresion) {
             push(&pila, caracter);
             
         } else if (caracter == ')') {
-            // Sacar elementos hasta encontrar '('
+        	
             while (!pila_vacia(pila) && cima(pila) != '(') {
             	
             		temporal = pop(&pila);
                 strncat(posfija, &temporal, 1);
                 
             }
-            pop(&pila); // Eliminar el paréntesis izquierdo
+            pop(&pila);
             
-        } else { // Es un operador
+        } else {
             while (!pila_vacia(pila) && prioridad(caracter) <= prioridad(cima(pila))) {
                 temporal = pop(&pila);
                 strncat(posfija, &temporal, 1);
@@ -167,7 +197,6 @@ void inf_a_posf (char *expresion) {
         }
     }
 
-    // Sacar los elementos restantes de la pila
     while (!pila_vacia(pila)) {
         temporal = pop(&pila);
         strncat(posfija, &temporal, 1);
@@ -176,6 +205,46 @@ void inf_a_posf (char *expresion) {
     strcpy ( expresion, posfija );
     free(posfija);
 }
+
+// 4.
+
+int evaluar_posfija ( char ecuacion[] ){
+	
+	int i;
+	Nodo *pila = ( Nodo* ) malloc ( sizeof (Nodo) );
+	
+	for ( i=0; i < strlen(ecuacion); i++ ){
+		
+		if ( isdigit(ecuacion[i])){
+			push( &pila, ecuacion[i] );
+		}
+		
+		num2 = pop (&pila);
+		num1 = pop (&pila);
+		
+		push( & pila, operacion(num1, num2, ecuacion[i]) );
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

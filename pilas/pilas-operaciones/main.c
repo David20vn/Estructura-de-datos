@@ -28,8 +28,47 @@ int main(){
 				scanf("%[^\n]", cadena);
 				printf ( balanceo(cadena) ? "Esta bien balanceado" : "Esta mal balanceado" );
 				break;
+			case 4: 
+				printf( "\n\nDigite la ecuacion a evaluar: ");
+				scanf("%[^\n]", cadena);
+				printf ( evaluar_posfija(cadena) ? "Bien" : "mal" );
+				break;
 		}
-	} while ( opcion != 4 );
+	} while ( opcion != 5 );
 	
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
