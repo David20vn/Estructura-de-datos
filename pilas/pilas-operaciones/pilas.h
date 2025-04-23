@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 typedef struct Nodo Nodo;
 
@@ -21,7 +22,7 @@ int menu(){
 	printf("\n\t1) Comprobar palabra palindrome.");
 	printf("\n\t2) pasar de infija a posfija.");
 	printf("\n\t3) Comprobar balanceo de parentesis.");
-	printf("\n\t4) Evaluar una expresión en notación postfija.");
+	printf("\n\t4) Evaluar una expresion en notacion postfija.");
 	printf("\n\t5) Salir.");
 	
 	printf("\nOpcion: ");
@@ -106,7 +107,7 @@ int operacion ( char num1, char num2, char operador ){
 			return (num1-'0') / (num2-'0');
 			break;
 		case '^':
-			return (num1-'0') ** (num2-'0');
+			return pow((num1-'0'), (num2-'0'));
 			break;
 	}
 }
@@ -208,22 +209,26 @@ void inf_a_posf (char *expresion) {
 
 // 4.
 
-int evaluar_posfija ( char ecuacion[] ){
+char evaluar_posfija ( char ecuacion[] ){
 	
-	int i;
-	Nodo *pila = ( Nodo* ) malloc ( sizeof (Nodo) );
+	int i, num1, num2;
+	Nodo *pila = NULL;
 	
 	for ( i=0; i < strlen(ecuacion); i++ ){
 		
 		if ( isdigit(ecuacion[i])){
 			push( &pila, ecuacion[i] );
+		} else {
+			num2 = pop (&pila);
+			num1 = pop (&pila);
+				
+			push( &pila, operacion(num1, num2, ecuacion[i])+'0' );
+
 		}
-		
-		num2 = pop (&pila);
-		num1 = pop (&pila);
-		
-		push( & pila, operacion(num1, num2, ecuacion[i]) );
 	}
+	
+	return pop(&pila);
+	
 }
 
 

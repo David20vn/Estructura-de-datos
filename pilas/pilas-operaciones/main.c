@@ -31,7 +31,7 @@ int main(){
 			case 4: 
 				printf( "\n\nDigite la ecuacion a evaluar: ");
 				scanf("%[^\n]", cadena);
-				printf ( evaluar_posfija(cadena) ? "Bien" : "mal" );
+				printf ( "El resultado es: %c", evaluar_posfija(cadena));
 				break;
 		}
 	} while ( opcion != 5 );
