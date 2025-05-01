@@ -32,6 +32,9 @@ int menu(){
 	printf("\t6) Valor mínimo\n");
 	printf("\t7) Valor máximo\n");
 	printf("\t8) Contar nodos.\n");
+	printf("\t9) Eliminar un elemento.\n");
+	printf("\t10) Salir.\n");
+	
 	printf("\nOpcion: ");
 	scanf ("%d", &option);
 	printf("\n");
@@ -69,9 +72,15 @@ void position_node( Node** tree, Node* node ){
 	
 	if ( node->number < (*tree)->number ){
 		position_node( &((*tree)->left), node );
-	} else {
+	} else if ( node->number > (*tree)->number ){
 		position_node( &((*tree)->right), node );
+	} else {
+		return;
 	}
+}
+
+int sheet ( Node* tree ){
+	return ( tree->left == NULL && tree->right == NULL );
 }
 
 // 1.
@@ -184,6 +193,42 @@ int count_nodes ( Node *tree ){
     return ( 1 + count_nodes(tree->left) + count_nodes(tree->right) );
     
 }
+
+// 9.
+
+void delete_node ( Node** tree, int element ){
+
+	if ( *tree == NULL ){
+		return;
+	}
+	
+	int minimum, maximum;
+	Node *temporal;
+	
+  if ( element < (*tree)->number ){
+  	delete_node ( &(*tree)->left, element );
+  	
+	} else if ( element > (*tree)->number){
+		delete_node ( &(*tree)->right, element);
+		
+	} else if ( sheet(*tree)){
+		temporal = *tree;
+		free(temporal);
+		*tree = NULL;
+		
+	} else if ( !empty_tree((*tree)->left) ){
+		maximum = maximum_value((*tree)->left);
+		(*tree)->number = maximum;
+		delete_node (&(*tree)->left, maximum);
+		
+	} else {
+		minimum = minimum_value((*tree)->right);
+		(*tree)->number = minimum;
+		delete_node (&(*tree)->right, minimum);
+	} 
+	
+}
+
 
 
 

@@ -43,8 +43,15 @@ int main() {
 				case 8: 
 					printf( "El arbol tiene %d nodos", count_nodes(tree));
 					break;
+				case 9: 
+					printf ("\nDigite el numero del nodo a eliminar: ");
+					scanf ("%d", &number);
+					while (getchar() != '\n');
+					
+					delete_node(&tree, number );
+					break;
 			}
-		} while ( option != 9 );
+		} while ( option != 10 );
 
     return 0;
 }

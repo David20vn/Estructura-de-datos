@@ -8,7 +8,23 @@ typedef struct Node {
     int height;
 } Node;
 
-// auxiliares
+// inicio auxiliares
+
+int menu (){
+
+	int option;
+	
+	printf ("\n\n\t\tMENU");
+	printf ("\n\t1) Insertar elemento.");
+	printf ("\n\t2) Eliminar elemento.");
+	printf ("\n\t3) Mostrar arbol.");
+	printf ("\n\t0) Salir.");
+	printf ("\n\nOpcion: ");
+	
+	scanf("%d", &option);
+	
+	return option;
+}
 
 int height(Node *N) {
     if (N == NULL)
@@ -35,15 +51,29 @@ int getBalance(Node *N) {
     return height(N->left) - height(N->right);
 }
 
-void in_order(Node *root) {
-    if (root != NULL) {
-        in_order(root->left);
-        printf("%d ", root->key);
-        in_order(root->right);
+int minimum_value(Node* node) {
+
+    while (node->left != NULL) {
+        node = node->left;
     }
+
+    return node->key;
 }
 
-// rotaciones
+int maximum_value(Node* node) {
+
+    while (node->right != NULL) {
+        node = node->right;
+    }
+
+    return node->key;
+}
+
+int sheet ( Node* tree ){
+	return ( tree->left == NULL && tree->right == NULL );
+}
+
+// inicio rotaciones
 
 Node* rightRotate(Node *y) {
     Node *x = y->left;
@@ -71,7 +101,33 @@ Node* leftRotate(Node *x) {
     return y;
 }
 
-// funcion insertar
+// fin rotaciones
+
+Node* to_balance(Node *node, int balance) {
+
+    if (balance > 1 && getBalance(node->left) >= 0)
+        return rightRotate(node);
+
+    if (balance > 1 && getBalance(node->left) < 0) {
+        node->left = leftRotate(node->left);
+        return rightRotate(node);
+    }
+
+    if (balance < -1 && getBalance(node->right) <= 0)
+        return leftRotate(node);
+
+    if (balance < -1 && getBalance(node->right) > 0) {
+        node->right = rightRotate(node->right);
+        return leftRotate(node);
+    }
+    
+    return node;
+    
+}
+
+// fin auxiliares
+
+// 1-insertar
 
 Node* insert(Node* node, int key) {
 
@@ -89,26 +145,75 @@ Node* insert(Node* node, int key) {
 
     int balance = getBalance(node);
 
-    // corregir desbalances
-
-    if (balance > 1 && key < node->left->key)
-        return rightRotate(node);
-
-    if (balance < -1 && key > node->right->key)
-        return leftRotate(node);
-
-    if (balance > 1 && key > node->left->key) {
-        node->left = leftRotate(node->left);
-        return rightRotate(node);
-    }
-
-    if (balance < -1 && key < node->right->key) {
-        node->right = rightRotate(node->right);
-        return leftRotate(node);
-    }
-
-    return node;
+    return to_balance ( node, balance );
 }
+
+// 2-eliminar
+
+Node* delete_node ( Node* node, int key ){
+
+	int minimum, maximum;
+	
+	if ( node == NULL ){
+		return NULL;
+	}
+	
+  if ( key < node->key ){
+  	node->left = delete_node ( node->left, key );
+  	
+	} else if ( key > node->key ){
+		node->right = delete_node ( node->right, key);
+		
+	} else if ( sheet(node) ){
+		free(node);
+		return NULL;
+		
+	} else if ( node->left != NULL	 ){
+		maximum = maximum_value(node->left);
+		node->key = maximum;
+		node->left = delete_node (node->left, maximum);
+		
+	} else {
+		minimum = minimum_value(node->right);
+		node->key = minimum;
+		node->right = delete_node (node->right, minimum);
+	}
+	
+	node->height = 1 + max(height(node->left), height(node->right));
+	
+	int balance = getBalance ( node );
+	
+  return to_balance ( node, balance );
+	
+}
+
+// 3-mostrar
+
+void in_order(Node *root) {
+    if (root != NULL) {
+        in_order(root->left);
+        printf("%d ", root->key);
+        in_order(root->right);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
